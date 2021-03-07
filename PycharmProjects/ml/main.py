@@ -6,6 +6,9 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
     precision_recall_fscore_support, roc_curve, roc_auc_score
 from sklearn.model_selection import train_test_split, KFold
 import matplotlib.pyplot as plt
+from sklearn.tree import DecisionTreeClassifier, export_graphviz
+import graphviz
+from IPython.display import Image
 
 pd.options.display.max_columns = 10
 dataframe = pd.read_csv("titanic.csv")
@@ -51,12 +54,12 @@ y = dataframe["Survived"].values
 # plt.show()
 
 # model = LogisticRegression()
-# model.fit(x, y)
-kf = KFold(n_splits=5, shuffle=True)
+# model.fit(x_train, y_train)
+# kf = KFold(n_splits=5, shuffle=True)
 """for train, test in kf.split(x_train):
     print(train, test)"""
-splits = list(kf.split(x))
-for i in range(5):
+# splits = list(kf.split(x))
+"""for i in range(5):
     my_split = splits[i]
     train_indices, test_indices = my_split
     x_train = x[train_indices]
@@ -65,7 +68,7 @@ for i in range(5):
     y_test = y[test_indices]
     model = LogisticRegression()
     model.fit(x_train, y_train)
-    print(i, "--> ", model.score(x_test, y_test))
+    print(i, "--> ", model.score(x_test, y_test))"""
 # first_split = splits[0]
 # print(first_split)
 # train_indices, test_indices = first_split
@@ -85,9 +88,13 @@ print(model.score(x_test, y_test))"""
 # print(model.coef_, model.intercept_)
 # print(model.predict(x[:5]))
 
-# yPrediction = model.predict(x)
+# yPrediction = model.predict(x_test)
 # print((y == yPrediction).sum() / y.shape[0])
 # print(model.score(x, y))
+"""print("logistic regression")
+print("accuracy: ", accuracy_score(y_test, yPrediction))
+print("precision: ", precision_score(y_test, yPrediction))
+print("recall: ", recall_score(y_test, yPrediction))"""
 
 """cancer_data = load_breast_cancer()
 # print(cancer_data.keys())
@@ -153,3 +160,38 @@ plt.show()
 y_pred_2 = cancer_model_new.predict_proba(x_test)[:, 1] > 0.75
 # print("precision: ", precision_score(y_test, y_pred_2))
 # print("recall: ", recall_score(y_test, y_pred_2))"""
+
+tree = DecisionTreeClassifier()
+# x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=22)
+tree.fit(x, y)
+# y_prediction = tree.predict(x_test)
+# print("decision tree")
+# print("accuracy: ", accuracy_score(y_test, y_prediction))
+# print("precision: ", precision_score(y_test, y_prediction))
+# print("recall: ", recall_score(y_test, y_prediction))
+"""kf = KFold(n_splits=5, shuffle=True)
+for i in ["gini", "entropy"]:
+    print(i)
+    accuracy = []
+    precision = []
+    recall = []
+    for train_index, test_index in kf.split(x):
+        x_train, x_test = x[train_index], x[test_index]
+        y_train, y_test = y[train_index], y[test_index]
+        tree = DecisionTreeClassifier(criterion=i)
+        tree.fit(x_train, y_train)
+        y_pred = tree.predict(x_test)
+        accuracy.append(accuracy_score(y_test, y_pred))
+        precision.append(precision_score(y_test, y_pred))
+        recall.append(recall_score(y_test, y_pred))
+    print("accuracy: ", np.mean(accuracy))
+    print("precision: ", np.mean(precision))
+    print("recall: ", np.mean(recall))"""
+
+feature_names = ["Pclass", "Male", "Age", "Siblings/Spouses", "Parents/Children", "Fare"]
+dot_file = export_graphviz(tree, feature_names=feature_names)
+graph = graphviz.Source(dot_file)
+graph.render(filename='tree', format='png', cleanup=True, view=True)
+
+
+
