@@ -1,3 +1,4 @@
+import math
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -6,6 +7,7 @@ dataframe = pd.read_csv("data.csv")
 
 # set for checking duplicates
 theSet = set([])
+
 # removing duplicates
 for x in dataframe["Theta"]:
     if theSet.__contains__(x):
@@ -15,6 +17,82 @@ for x in dataframe["Theta"]:
         theSet.add(x)
 
 df = dataframe.sort_values(by='Theta')
+
+mag_pos_a = []
+mag_vel_a = []
+mag_acc_a = []
+
+mag_pos_b = []
+mag_vel_b = []
+mag_acc_b = []
+
+mag_pos_c = []
+mag_vel_c = []
+mag_acc_c = []
+
+mag_pos_d = []
+mag_vel_d = []
+mag_acc_d = []
+
+mag_pos_d0 = []
+mag_vel_d0 = []
+mag_acc_d0 = []
+
+for x, y in zip(df["A-X (meter)"], df["A-Y (meter)"]):
+    mag_pos_a.append(math.sqrt((x*x)+(y*y)))
+for x, y in zip(df["A-X Vel (meter/sec)"], df["A-Y Vel (meter/sec)"]):
+    mag_vel_a.append(math.sqrt((x*x)+(y*y)))
+for x, y in zip(df["A-X Acc (meter/sec**2)"], df["A-Y Acc (meter/sec**2)"]):
+    mag_acc_a.append(math.sqrt((x*x)+(y*y)))
+
+for x, y in zip(df["B-X (meter)"], df["B-Y (meter)"]):
+    mag_pos_b.append(math.sqrt((x*x)+(y*y)))
+for x, y in zip(df["B-X Vel (meter/sec)"], df["B-Y Vel (meter/sec)"]):
+    mag_vel_b.append(math.sqrt((x*x)+(y*y)))
+for x, y in zip(df["B-X Acc (meter/sec**2)"], df["B-Y Acc (meter/sec**2)"]):
+    mag_acc_b.append(math.sqrt((x*x)+(y*y)))
+
+for x, y in zip(df["C-X (meter)"], df["C-Y (meter)"]):
+    mag_pos_c.append(math.sqrt((x*x)+(y*y)))
+for x, y in zip(df["C-X Vel (meter/sec)"], df["C-Y Vel (meter/sec)"]):
+    mag_vel_c.append(math.sqrt((x*x)+(y*y)))
+for x, y in zip(df["C-X Acc (meter/sec**2)"], df["C-Y Acc (meter/sec**2)"]):
+    mag_acc_c.append(math.sqrt((x*x)+(y*y)))
+
+for x, y in zip(df["D-X (meter)"], df["D-Y (meter)"]):
+    mag_pos_d.append(math.sqrt((x*x)+(y*y)))
+for x, y in zip(df["D-X Vel (meter/sec)"], df["D-Y Vel (meter/sec)"]):
+    mag_vel_d.append(math.sqrt((x*x)+(y*y)))
+for x, y in zip(df["D-X Acc (meter/sec**2)"], df["D-Y Acc (meter/sec**2)"]):
+    mag_acc_d.append(math.sqrt((x*x)+(y*y)))
+
+for x, y in zip(df["D0-X (meter)"], df["D0-Y (meter)"]):
+    mag_pos_d0.append(math.sqrt((x*x)+(y*y)))
+for x, y in zip(df["D0-X Vel (meter/sec)"], df["D0-Y Vel (meter/sec)"]):
+    mag_vel_d0.append(math.sqrt((x*x)+(y*y)))
+for x, y in zip(df["D0-X Acc (meter/sec**2)"], df["D0-Y Acc (meter/sec**2)"]):
+    mag_acc_d0.append(math.sqrt((x*x)+(y*y)))
+
+df["Magnitude Position A"] = mag_pos_a
+df["Magnitude Velocity A"] = mag_vel_a
+df["Magnitude Acc A"] = mag_acc_a
+
+df["Magnitude Position B"] = mag_pos_b
+df["Magnitude Velocity B"] = mag_vel_b
+df["Magnitude Acc B"] = mag_acc_b
+
+df["Magnitude Position C"] = mag_pos_c
+df["Magnitude Velocity C"] = mag_vel_c
+df["Magnitude Acc C"] = mag_acc_c
+
+df["Magnitude Position D"] = mag_pos_d
+df["Magnitude Velocity D"] = mag_vel_d
+df["Magnitude Acc D"] = mag_acc_d
+
+df["Magnitude Position D0"] = mag_pos_d0
+df["Magnitude Velocity D0"] = mag_vel_d0
+df["Magnitude Acc D0"] = mag_acc_d0
+
 f1 = plt.figure(figsize=(30, 15))
 
 ax1 = f1.add_subplot(3, 3, 1)
@@ -59,16 +137,104 @@ ax6.set_xlabel('Theta')
 ax6.grid(True)
 ax6.set_xlim([-3.14, 3.14])
 
-"""ax7 = f1.add_subplot(3, 3, 7)
-ax7.plot(df["Theta"], df["A-Y Acc (meter/sec**2)"])
-ax7.set_ylabel('A-Y Acc (meter/sec**2)')
+ax7 = f1.add_subplot(3, 3, 7)
+ax7.plot(df["Theta"], df["Magnitude Position A"])
+ax7.set_ylabel('Magnitude Position A')
 ax7.set_xlabel('Theta')
 ax7.grid(True)
-ax7.set_xlim([-3.14, 3.14])"""
+ax7.set_ylim([-0.1, 0.1])
+
+ax8 = f1.add_subplot(3, 3, 8)
+ax8.plot(df["Theta"], df["Magnitude Velocity A"])
+ax8.set_ylabel('Magnitude Velocity A')
+ax8.set_xlabel('Theta')
+ax8.grid(True)
+ax8.set_ylim([-0.1, 1.0])
+
+ax9 = f1.add_subplot(3, 3, 9)
+ax9.plot(df["Theta"], df["Magnitude Acc A"])
+ax9.set_ylabel('Magnitude Acc A')
+ax9.set_xlabel('Theta')
+ax9.grid(True)
+ax9.set_ylim([-0.1, 1.0])
 
 plt.suptitle('Kinematic Analysis For Point A')
 plt.grid(True)
 x1, x2, y1, y2 = plt.axis()
 plt.axis((-3.14, 3.14, y1, y2))
+plt.savefig('outputA.png')
+
+
+####################################################
+f2 = plt.figure(figsize=(30, 15))
+
+ax1b = f2.add_subplot(3, 3, 1)
+ax1b.plot(df["Theta"], df["B-X (meter)"])
+ax1b.set_ylabel('B-X (meter)')
+ax1b.set_xlabel('Theta')
+ax1b.grid(True)
+ax1b.set_xlim([-3.14, 3.14])
+
+ax2b = f2.add_subplot(3, 3, 4)
+ax2b.plot(df["Theta"], df["B-Y (meter)"])
+ax2b.set_ylabel('B-Y (meter)')
+ax2b.set_xlabel('Theta')
+ax2b.grid(True)
+ax2b.set_xlim([-3.14, 3.14])
+
+ax3b = f2.add_subplot(3, 3, 2)
+ax3b.plot(df["Theta"], df["B-X Vel (meter/sec)"])
+ax3b.set_ylabel('B-X Vel (meter/sec)')
+ax3b.set_xlabel('Theta')
+ax3b.grid(True)
+ax3b.set_xlim([-3.14, 3.14])
+
+ax4b = f2.add_subplot(3, 3, 3)
+ax4b.plot(df["Theta"], df["B-X Acc (meter/sec**2)"])
+ax4b.set_ylabel('B-X Acc (meter/sec**2)')
+ax4b.set_xlabel('Theta')
+ax4b.grid(True)
+ax4b.set_xlim([-3.14, 3.14])
+
+ax5b = f2.add_subplot(3, 3, 5)
+ax5b.plot(df["Theta"], df["B-Y Vel (meter/sec)"])
+ax5b.set_ylabel('B-Y Vel (meter/sec)')
+ax5b.set_xlabel('Theta')
+ax5b.grid(True)
+ax5b.set_xlim([-3.14, 3.14])
+
+ax6b = f2.add_subplot(3, 3, 6)
+ax6b.plot(df["Theta"], df["B-Y Acc (meter/sec**2)"])
+ax6b.set_ylabel('B-Y Acc (meter/sec**2)')
+ax6b.set_xlabel('Theta')
+ax6b.grid(True)
+ax6b.set_xlim([-3.14, 3.14])
+
+ax7b = f2.add_subplot(3, 3, 7)
+ax7b.plot(df["Theta"], df["Magnitude Position B"])
+ax7b.set_ylabel('Magnitude Position B')
+ax7b.set_xlabel('Theta')
+ax7b.grid(True)
+ax7b.set_ylim([0.06, 0.13])
+
+ax8b = f2.add_subplot(3, 3, 8)
+ax8b.plot(df["Theta"], df["Magnitude Velocity B"])
+ax8b.set_ylabel('Magnitude Velocity B')
+ax8b.set_xlabel('Theta')
+ax8b.grid(True)
+ax8b.set_ylim([0.0, 0.12])
+
+ax9b = f2.add_subplot(3, 3, 9)
+ax9b.plot(df["Theta"], df["Magnitude Acc B"])
+ax9b.set_ylabel('Magnitude Acc B')
+ax9b.set_xlabel('Theta')
+ax9b.grid(True)
+ax9b.set_ylim([0.0, 0.6])
+
+plt.suptitle('Kinematic Analysis For Point B')
+plt.grid(True)
+x1, x2, y1, y2 = plt.axis()
+plt.axis((-3.14, 3.14, y1, y2))
+plt.savefig('outputB.png')
 plt.show()
 
