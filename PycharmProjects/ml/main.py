@@ -4,7 +4,7 @@ import numpy as np
 from sklearn.datasets import load_breast_cancer
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, \
     precision_recall_fscore_support, roc_curve, roc_auc_score
-from sklearn.model_selection import train_test_split, KFold
+from sklearn.model_selection import train_test_split, KFold, GridSearchCV
 import matplotlib.pyplot as plt
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
 import graphviz
@@ -161,10 +161,17 @@ y_pred_2 = cancer_model_new.predict_proba(x_test)[:, 1] > 0.75
 # print("precision: ", precision_score(y_test, y_pred_2))
 # print("recall: ", recall_score(y_test, y_pred_2))"""
 
-tree = DecisionTreeClassifier()
-# x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=22)
-tree.fit(x, y)
+tree = DecisionTreeClassifier(max_depth=5, min_samples_leaf=2, max_leaf_nodes=15)
+x_train, x_test, y_train, y_test = train_test_split(x, y, random_state=22)
+# tree.fit(x_train, y_train)
 # y_prediction = tree.predict(x_test)
+param_grid = {
+    'max_depth': [5, 15, 25],
+    'min_samples_leaf': [1, 3],
+    'max_leaf_nodes': [10, 20, 35, 50]}
+gs = GridSearchCV(tree, param_grid, scoring='f1', cv=5)
+gs.fit(x, y)
+print("best parameters: ", gs.best_params_)
 # print("decision tree")
 # print("accuracy: ", accuracy_score(y_test, y_prediction))
 # print("precision: ", precision_score(y_test, y_prediction))
@@ -188,10 +195,11 @@ for i in ["gini", "entropy"]:
     print("precision: ", np.mean(precision))
     print("recall: ", np.mean(recall))"""
 
-feature_names = ["Pclass", "Male", "Age", "Siblings/Spouses", "Parents/Children", "Fare"]
-dot_file = export_graphviz(tree, feature_names=feature_names)
-graph = graphviz.Source(dot_file)
-graph.render(filename='tree', format='png', cleanup=True, view=True)
+# feature_names = ["Pclass", "Male", "Age", "Siblings/Spouses", "Parents/Children", "Fare"]
+# dot_file = export_graphviz(tree, feature_names=feature_names)
+# graph = graphviz.Source(dot_file)
+# graph.render(filename='tree', format='png', cleanup=True, view=True)
+
 
 
 
