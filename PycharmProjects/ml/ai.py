@@ -12,11 +12,16 @@ theSet = set([])
 for x in dataframe["Theta"]:
     if theSet.__contains__(x):
         indexNames = dataframe[dataframe['Theta'] == x].index
-        dataframe.drop(indexNames[1], inplace=True)
+        dataframe.drop(indexNames[0], inplace=True)
     else:
         theSet.add(x)
 
 df = dataframe.sort_values(by='Theta')
+df.to_csv("my.csv")
+"""for x in df["B-X Acc (meter/sec**2)"]:
+    if abs(x)<0.0001:
+        print("yes")"""
+
 
 mag_pos_a = []
 mag_vel_a = []
@@ -93,7 +98,7 @@ df["Magnitude Position D0"] = mag_pos_d0
 df["Magnitude Velocity D0"] = mag_vel_d0
 df["Magnitude Acc D0"] = mag_acc_d0
 
-f1 = plt.figure(figsize=(30, 15))
+f1 = plt.figure(figsize=(14.8, 8.4))
 
 ax1 = f1.add_subplot(3, 3, 1)
 ax1.plot(df["Theta"], df["A-X (meter)"])
@@ -166,7 +171,7 @@ plt.savefig('outputA.png')
 
 
 ####################################################
-f2 = plt.figure(figsize=(30, 15))
+f2 = plt.figure(figsize=(14.8, 8.4))
 
 ax1b = f2.add_subplot(3, 3, 1)
 ax1b.plot(df["Theta"], df["B-X (meter)"])
@@ -236,5 +241,4 @@ plt.grid(True)
 x1, x2, y1, y2 = plt.axis()
 plt.axis((-3.14, 3.14, y1, y2))
 plt.savefig('outputB.png')
-plt.show()
 
