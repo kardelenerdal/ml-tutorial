@@ -17,11 +17,6 @@ for x in dataframe["Theta"]:
         theSet.add(x)
 
 df = dataframe.sort_values(by='Theta')
-# df.to_csv("my.csv")
-"""for x in df["B-X Acc (meter/sec**2)"]:
-    if abs(x)<0.0001:
-        print("yes")"""
-
 
 mag_pos_a = []
 mag_vel_a = []
@@ -168,7 +163,6 @@ plt.grid(True)
 x1, x2, y1, y2 = plt.axis()
 plt.axis((-3.14, 3.14, y1, y2))
 plt.savefig('outputA.png')
-
 
 ####################################################
 f2 = plt.figure(figsize=(15.2, 8.4))
